@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block title%} <title> Home: Task Manager </title>{% endblock title %}
+
+{% block content %}
+<div class="container">
+<div class="row mt-5">
+    <div class="col-lg-4">
+        <img src="{%static 'images/notes.jpg' %}" alt="notes" class="rounded-lg shadow-sm" width="360" height="250">
+        </div>
+        <div class="col-lg-4">
+            <img src="{%static 'images/notes.jpg' %}" alt="notes" class="rounded-lg shadow-sm" width="360" height="250">
+            </div>
+        <div class="col-lg-4">
+                <img src="{%static 'images/notes.jpg' %}" alt="notes" class="rounded-lg shadow-sm" width="360" height="250">
+                </div>      
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-10 offset-md-1">
+               <center> <p class="h1"> Quick and Easy to Use, made for your comfort! </p> </center>
+                <center><p class="h3 mt-3"> Task Manager is here to save you from procrasticating your day away. </p> </center>
+                    <center><p class="h5"> A more classified and scheduled way to do things and be productive! </p> </center>
+                    <center><a href="{%url 'todolist' %}"><button type="button" class="btn btn-primary btn-lg shadow mt-3">Let's get Started</button></a></center>
+                </div>  
+                </div>
+    {% endblock content%}
+
