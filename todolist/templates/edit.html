@@ -4,6 +4,7 @@
 {% block content %}
 <div class="container">
     <br>
+    {% if task_obj.manager == request.user %}
     <form method="POST" class="row">
         {%csrf_token %}
         <label class="col-lg-2"></label>
@@ -11,5 +12,8 @@
         <input type="hidden" name="done" value="{{task_obj.done}}">
         <button type="submit" class="btn btn-primary col-lg-2">Update Task</button>
     </form>
+    {%else%}
+    <button type="button" class="btn btn-danger">Access is Restricted!</button>
+    {%endif%}
 </div>
     {% endblock content%}

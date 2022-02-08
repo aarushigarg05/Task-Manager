@@ -5,6 +5,7 @@ from todolist.models import TaskList
 from todolist.form import TaskForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -15,29 +16,33 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-
+@login_required
 def todolist(request):
     if request.method == 'POST':
         form = TaskForm(request.POST or None)
         if form.is_valid():
+            form.save(commit=False).manager=request.user
             form.save()
         messages.success(request, "New Task Added!")
         return redirect('todolist')
 
     else:
-        tasks = TaskList.objects.all()
+        tasks = TaskList.objects.filter(manager=request.user)
         paginator=Paginator(tasks,5)
         page=request.GET.get('pg')
         tasks=paginator.get_page(page)
         return render(request, 'todolist.html', {'tasks': tasks})
 
-
+@login_required
 def delete_task(request, task_id):
     task = TaskList.objects.get(pk=task_id)
-    task.delete()
+    if task.manager==request.user:
+        task.delete()
+    else:
+        messages.error(request, "Access is Restricted!")
     return redirect('todolist')
 
-
+@login_required
 def edit_task(request, task_id):
     if request.method == 'POST':
         task = TaskList.objects.get(pk=task_id)
@@ -53,14 +58,20 @@ def edit_task(request, task_id):
 
 def complete_task(request, task_id):
     task = TaskList.objects.get(pk=task_id)
-    task.done = True
-    task.save()
+    if task.manager==request.user:
+        task.done = True
+        task.save()
+    else:
+        messages.error(request, "Access is Restricted!")
     return redirect('todolist')
 
 def pending_task(request, task_id):
     task = TaskList.objects.get(pk=task_id)
-    task.done = False
-    task.save()
+    if task.manager==request.user:
+        task.done = False
+        task.save()
+    else:
+        messages.error(request, "Access is Restricted!")
     return redirect('todolist')
 
 def contact(request):
